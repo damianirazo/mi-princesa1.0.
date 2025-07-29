@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Te quiero mucho mi peque</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      overflow: hidden;
+      font-family: 'Comic Sans MS', cursive;
+    }
+
+    #oso {
+      position: absolute;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 80px;
+      z-index: 2;
+    }
+
+    .corazon {
+      position: absolute;
+      font-size: 30px;
+      animation: disparar 4s linear forwards;
+      color: red;
+    }
+
+    @keyframes disparar {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: translateY(-300px) scale(1.2);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(500px) scale(0.8);
+        opacity: 0;
+      }
+    }
+
+    #mensaje {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      color: #ff4da6;
+      z-index: 1;
+      white-space: pre-wrap;
+    }
+
+    .letra {
+      opacity: 0;
+      transition: opacity 1s;
+      display: inline-block;
+    }
+
+    .letra.visible {
+      opacity: 1;
+    }
+
+    #musica {
+      display: none; /* ocultamos los controles */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Osito -->
+  <div id="oso">🧸</div>
+
+  <!-- Contenedor del mensaje -->
+  <div id="mensaje"></div>
+
+  <!-- Música personalizada -->
+  <audio id="musica" autoplay loop>
+    <source src="mi-musica.mp3" type="audio/mp3">
+    Tu navegador no puede reproducir este archivo.
+  </audio>
+
+  <script>
+    const mensaje = "Te quiero mucho mi peque";
+    const mensajeDiv = document.getElementById("mensaje");
+    const letras = mensaje.split("").map((letra) => {
+      const span = document.createElement("span");
+      span.textContent = letra;
+      span.className = "letra";
+      mensajeDiv.appendChild(span);
+      return span;
+    });
+
+    let letraActual = 0;
+
+    function dispararCorazon() {
+      const corazon = document.createElement("div");
+      corazon.className = "corazon";
+      corazon.textContent = "❤️";
+      corazon.style.left = `${50 + (Math.random() * 40 - 20)}%`;
+      corazon.style.bottom = `120px`;
+      document.body.appendChild(corazon);
+
+      setTimeout(() => {
+        corazon.remove();
+        if (letraActual < letras.length) {
+          letras[letraActual].classList.add("visible");
+          letraActual++;
+        }
+      }, 3500);
+    }
+
+    setInterval(dispararCorazon, 600);
+
+    // Activar audio al primer clic (por políticas del navegador)
+    window.addEventListener("click", () => {
+      const musica = document.getElementById("musica");
+      if (musica.paused) {
+        musica.play().catch((e) => {
+          console.log("No se pudo reproducir la música:", e);
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
